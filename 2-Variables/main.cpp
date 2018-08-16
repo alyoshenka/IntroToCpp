@@ -1,6 +1,6 @@
 #include <iostream>
 int main() {
-	/*
+	
 	// 1
 	int z = 1;
 	std::cout << z << std::endl;
@@ -205,9 +205,10 @@ int main() {
 
 	std::cout << "Num1 = " << t << std::endl;
 	std::cout << "Num2 = " << u << std::endl;
-	*/
+	
 
-	// Errors	
+	// Errors
+	/*
 	float s = 2.0f;
 	std::cout << "Input  number:" << std::endl;
 	bool isNum = false;
@@ -226,7 +227,7 @@ int main() {
 	}
 	std::cout << "1 = T: " << isNum << std::endl;
 	std::cout << "Your number is: " << s << std::endl;
-
+	*/
 
 	system("pause");
 	return 0;
