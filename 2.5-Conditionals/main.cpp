@@ -1,10 +1,19 @@
 #include <iostream>;
 
+// check if int is in array
+bool intInArr(int val, int arr[]) {
+	bool intInArr = false;
+	for (int i = 0; i < sizeof(arr); i++) {
+		if (arr[i] == val) {
+			intInArr = true;
+		}
+	}
+	return intInArr;
+}
 
 int main() {
 
-	int num = 0;
-	/*
+	// int num = 0;
 
 	// Evaluate
 	// A) 30
@@ -284,12 +293,40 @@ int main() {
 			std::cout << "Dino wins." << std::endl;
 		}
 	}
-	*/
 
 	// Challenge
 	// Detecting Capitalization
 	char letter = '+';
-	// std::cout << "Input a letter:" << std::endl;
+	bool isLetter = false;
+	int vowels[] = {65, 97, 69, 101, 73, 105, 79, 111, 85, 117}; // y is not a vowel
+	std::cout << "Input a letter:" << std::endl;
+	std::cin >> letter;
+	if (int(letter) >= 65 && int(letter) <= 90) {
+		std::cout << "This is an uppercase letter." << std::endl;
+		isLetter = true;
+	} else if (int(letter) >= 97 && int(letter) <= 122) {
+		std::cout << "This is a lowercase letter." << std::endl;
+		isLetter = true;
+	}
+	else {
+		std::cout << "This is not a letter. You must type a letter." << std::endl;
+	}
+	// if letter in vowels
+	if (intInArr(int(letter), vowels)) {
+		std::cout << "This is a vowel." << std::endl;
+	}
+	// if isLetter and not in vowels (consonant)
+	if (isLetter && !intInArr(int(letter), vowels)) {
+		std::cout << "This is a consonant." << std::endl;
+	}
+
+	// Ternary 
+	// A
+	int number = 23;
+	number = number >= 20 ? number * 5 : number;
+	// B
+	number = 6;
+	number = number < 20 ? number - 5 : number / 2;
 
 
 	system("pause");
