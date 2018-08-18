@@ -3,6 +3,11 @@
 #include "math_utils.h"
 // #include <cmath> // for sqrt
 
+// for rand
+// #include <stdio.h>      /* printf, scanf, puts, NULL */
+// #include <stdlib.h>     /* srand, rand */
+// #include <time.h>       /* time */
+
 int main() {
 
 	int val = sum(5, 2);
