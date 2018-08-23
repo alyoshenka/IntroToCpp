@@ -137,7 +137,21 @@ void sortAsc(int nums[], int size) {
 // sorts values in array in descending order
 void sortDes(int nums[], int size) {
 	std::cout << "sortDes" << std::endl;
+	int swap = 0;
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size - 1; j++) {
+			if (nums[j] < nums[j + 1]) {
+				swap = nums[j];
+				nums[j] = nums[j + 1];
+				nums[j + 1] = swap;
+			}
+		}
+	}
+}
 
+// sorts values in array in ascending order using insertion sort
+void insertionSortAsc(int nums[], int size) {
+	std::cout << "insertionSortAsc" << std::endl;
 }
 
 int main(){
