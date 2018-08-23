@@ -137,16 +137,7 @@ void sortAsc(int nums[], int size) {
 // sorts values in array in descending order
 void sortDes(int nums[], int size) {
 	std::cout << "sortDes" << std::endl;
-	int swap = 0;
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size - 1; j++) {
-			if (nums[j] < nums[j + 1]) {
-				swap = nums[j];
-				nums[j] = nums[j + 1];
-				nums[j + 1] = swap;
-			}
-		}
-	}
+
 }
 
 int main(){
@@ -191,6 +182,9 @@ int main(){
 	printNumbers(arr2, 5);
 
 	// Challenge
+	insertionSortAsc(arr, 5);
+	printNumbers(arr, 5);
+
 
 	system("pause");
 	return 0;
