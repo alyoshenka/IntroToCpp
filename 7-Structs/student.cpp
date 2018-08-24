@@ -77,3 +77,39 @@ int studentsInCourse(student s[], int courseNum) {
 	return count;
 }
 
+// returns  largest difference in grades across 
+// all students and tests
+// Takes the difference between the highest and 
+// lowest scores of each individual student and 
+// returns the highest
+float largestDif(student s[]) {
+	// 4 scores
+	int scores = 4;
+	// max student score
+	float max = 0;
+	// min student score
+	float min = 0;
+	// max difference among students
+	float maxDif = 0;
+	// for all students
+	for (int i = 0; i < size; i++) {
+		// for all scores
+		for (int j = 0; j < 4; j++) {
+			if (s[i].majorScores[j] < min) {
+				min = s[i].majorScores[j];
+			}
+		}
+	}
+}
+
+// returns index of the test with the lowest score
+int lowestScoreIdx(student s[]) {
+	return 0;
+}
+
+// returns average grade across all students,
+// weighting final exams to 40% of the final score
+float aveGrade(student s[]) {
+	return 0;
+}
+

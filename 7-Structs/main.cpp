@@ -19,12 +19,12 @@ int main() {
 	std::cout << calcPiggybankTotal(p1) << std::endl;
 
 	// Open
-	student s1 = { 12006, 1, 45 };
-	student s2 = { 12007, 2, 29 };
-	student s3 = { 12008, 2, 32 };
-	student s4 = { 12009, 1, 40 };
-	student s5 = { 12010, 2, 47 };
-	student s6 = { 12011, 2, 28 };	
+	student s1 = { 12006, 1, 45, {0.0f, 50.0f, 80.0f, 67.0f } };
+	student s2 = { 12007, 2, 29, {50.0f, 78.0f, 19.0f, 90.0f } };
+	student s3 = { 12008, 2, 32, {99.0f, 67.0f, 34.0f, 78.0f } };
+	student s4 = { 12009, 1, 40, {80.0f, 60.0f, 50.0f, 20.0f } };
+	student s5 = { 12010, 2, 47, {23.0f, 95.0f, 93.0f, 75.0f } };
+	student s6 = { 12011, 2, 28, {64.0f, 38.0f, 76.0f, 50.0f } };
 
 	// Print Student
 	std::cout << "Student" << std::endl;
