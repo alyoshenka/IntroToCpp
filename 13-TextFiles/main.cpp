@@ -46,9 +46,27 @@ int main() {
 	// textCorruption();
 	// commaToArray();
 	// printEntity(); FINISH
+	int entityCount = countEntitys();
+	Entity * arr = new Entity[ entityCount ];
+	loadEntityData(arr);
+	
+
+	// print Entity array
+	for (int i = 0; i < 5; i++) {
+		std::cout << "Name: " << arr[i].name << std::endl;
+		std::cout << "Hitpoints: " << arr[i].name << std::endl;
+		std::cout << "Armor: " << arr[i].name << std::endl;
+		std::cout << "Strength: " << arr[i].name << std::endl;
+		std::cout << "Defense: " << arr[i].name << std::endl;
+		std::cout << "Agility: " << arr[i].name << std::endl;
+		std::cout << "Luck: " << arr[i].name << std::endl;
+		std::cout << std::endl;
+	}
 
 	// Challenge
-	beCaesar();
+	// beCaesar();
+
+	delete[] arr;
 
 	system("pause");
 	return 0;

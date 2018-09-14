@@ -234,6 +234,90 @@ void printEntity() {
 	file.close();
 }
 
+// Count Entitys in file
+int countEntitys() {
+	string fileName;
+	fstream file;
+	int entityCount;
+	string data;
+
+	cout << "File name: ";
+	cin >> fileName;
+	file.open(fileName, ios_base::in);
+	// file validation
+	while (file.fail()) {
+		cout << "Bad file." << endl;
+		cout << "File name: ";
+		cin >> fileName;
+	}
+
+	// iterate through file and count Entitys
+	while (getline(file, data)) {
+		// if Entity name
+		if (data[0] == '@') {
+			// increment Entity count
+			entityCount++;
+		}
+	}
+	// close file
+	file.close();
+
+	return entityCount;
+
+}
+
+// Add Entity Data to Array
+void loadEntityData(Entity * entityArr[]) {
+
+	string fileName;
+	fstream file;
+	int entityCount;
+	string data;
+
+	// Entity array
+	// Entity *entityArr = new Entity[entityCount];
+
+	// go through file again
+	cout << "File name: ";
+	cin >> fileName;
+	file.open(fileName, ios_base::in);
+	// file validation
+	while (file.fail()) {
+		cout << "Bad file." << endl;
+		cout << "File name: ";
+		cin >> fileName;
+	}
+
+	// iterate through number of Entitys
+	while (! file.eof()) {
+		// get first line
+		getline(file, data);
+
+		// while not Entity
+		while (data[0] != '@') {
+			getline(file, data);
+		}
+		// add to struct array
+		for (int i = 0; i < entityCount; i++) {
+			entityArr[i].name = data; // remember to strip @
+			getline(file, data);
+			entityArr[i].hitpoints = stof(data);
+			getline(file, data);
+			entityArr[i].armor = stof(data);
+			getline(file, data);
+			entityArr[i].strength = stoi(data);
+			getline(file, data);
+			entityArr[i].strength = stoi(data);
+			getline(file, data);
+			entityArr[i].defense = stoi(data);
+			getline(file, data);
+			entityArr[i].agility = stoi(data);
+			getline(file, data);
+			entityArr[i].luck = stoi(data);
+		}
+	}
+}
+
 // Caeser's Messenger
 void beCaesar() {
 	int choice = 0;
@@ -359,9 +443,16 @@ void saveMessage() {
 		}
 	}
 
+	int size = 0;
+	while (message[size] != '\0') {
+		size++;
+	}
+
 	// offset by key
-	for (int i = 0; i < message.size(); i++) {
+	for (int i = 0; i < size; i++) {
 		message[i] += offset;
+		cout << "M: " << message[i] << endl;
+		cout << "i: " << i << endl;
 	}
 
 	file << message << endl;
