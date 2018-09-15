@@ -25,13 +25,19 @@ int main() {
 	saveData firstThing[] = { alexi };
 	saveData secondThing[] = { amanda, ray };
 
-	//saveDataToList("mySaveData.bin", firstThing, 1);
+	/*saveDataToList("mySaveData.bin", firstThing, 1);
 	readSaveDataFromFile("mySaveData.bin");
 
-	// saveDataToList("mySaveData.bin", secondThing, 2);
-	// readSaveDataFromFile("mySaveData.bin");
+	saveDataToList("mySaveData.bin", secondThing, 2);
+	readSaveDataFromFile("mySaveData.bin");
+	*/
+	// Open
+	monsterQuest();
+	// addMonster();
 
-	//system("pause");
+
+	// system("pause");
+	cout << "Weird sys pause thing" << endl;
 	char b;
 	std::cin >> b;
 
