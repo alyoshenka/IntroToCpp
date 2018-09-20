@@ -16,9 +16,9 @@ int chooseAction();
 
 void printMonster(Monster myMonster);
 
-void addMonster(int ID);
+bool addMonster(int ID);
 
-void removeMonster(int ID);
+bool removeMonster(int ID);
 
 void viewMonster(int ID);
 

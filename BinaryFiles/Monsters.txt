@@ -1,8 +1,0 @@
-person
-surfer
-banana
-
-dog
-gargoyle
-computer
-bird
