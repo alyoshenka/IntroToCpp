@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "helper.h"
+#include "monsterQuest.h"
 
 using std::string;
 using std::fstream;
@@ -33,13 +34,11 @@ int main() {
 	*/
 	// Open
 	monsterQuest();
-	// addMonster();
 
-
-	// system("pause");
-	cout << "Weird sys pause thing" << endl;
+	system("pause");
+	/*cout << "Weird sys pause thing" << endl;
 	char b;
-	std::cin >> b;
+	std::cin >> b;*/
 
 	return 0;
 }
