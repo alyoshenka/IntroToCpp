@@ -3,9 +3,9 @@
 using std::string;
 
 struct Monster {
-	string species;
-	string name;
-	string favoriteFood;
+	char species[50];
+	char name[50];
+	char favoriteFood[50];
 	int age;
 	int idNumber;
 };
