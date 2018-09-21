@@ -23,3 +23,7 @@ bool removeMonster(int ID);
 void viewMonster(int ID);
 
 void browseMonsters();
+
+int monsterCount();
+
+int highestIDNumber();

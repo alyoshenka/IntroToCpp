@@ -15,9 +15,10 @@ using std::ifstream;
 using std::ofstream;
 using std::ios;
 using std::ios_base;
+// using std::basic_string;
 
 // ADD VALIDATION: !> 15 MONSTERS
-// BUD ID > 15 IS OK
+// BUT ID > 15 IS OK
 
 // This function displays a welcome message and maintains 
 // the game loop
@@ -25,29 +26,30 @@ void monsterQuest() {
 	int choice = -1;
 	cout << "\nWelcome to Monster Quest!" << endl;
 	choice = chooseAction();
-	int ID = 1;
+	int ID = -1;
 	int getID = 0;
-	int monsterCount = 0; // this doesn't work
+	// int monsterCount = 0; // this doesn't work
 	// while not exiting
 	while (choice != 5) {
+		ID = highestIDNumber();
+		ID++;
 		// go to other options
 		switch (choice) {
 		case 1:
 			// if too many Monseters
-			if (monsterCount >= 15) {
+			/*if (monsterCount >= 15) {
 				cout << "Sorry, there is only room for 15 monsters int your bestiary!" << endl;
 				break;
-			}
+			}*/
 			if (addMonster(ID)) {
 				cout << "Monster added successfully!" << endl;
-				monsterCount++;
 			}
 			else {
 				cout << "Sorry, there was an error adding your Monster." << endl;
 			}
 			break;
 		case 2:
-			if (monsterCount <= 0) {
+			if (ID <= 1) {
 				cout << "There are no Monsters to remove!" << endl;
 				break;
 			}
@@ -62,13 +64,21 @@ void monsterQuest() {
 				cout << "Sorry, there was an error removing your Monster" << endl;
 			}
 			// remove
-			monsterCount--;
+			// monsterCount--;
 			break;
 		case 3:
-			// viewMonster();
+			if (ID <= 1) {
+				cout << "There are no Monsters to view!" << endl;
+				break;
+			}
+			// INPUT VALIDATION
+			getID = 0;
+			cout << "What is the ID Number of the Monster you would like to view?" << endl;
+			cin >> getID;
+			viewMonster(ID);
 			break;
 		case 4:
-			// browseMonsters();
+			browseMonsters();
 			break;
 		default:
 			// how tf
@@ -171,25 +181,12 @@ bool addMonster(int ID) {
 		cout << "'y' for yes: ";
 		cin >> check;
 	} while (check != 'y');
+
 	// add to file
-	// create bestiary directory
-	// CHECK IF OK
-	CreateDirectory("bestiary", NULL);
-	// TAKE OUT
-	/*if (GetLastError() == ERROR_ALREADY_EXISTS)
-	{
-		cout << "Looks like you already have a data folder. Nice!" << endl;
-		system("pause");
-	}
-	else
-	{
-
-		cout << "Monster data folder does not exsist . . . \nCreating" << endl;
-
-	}*/
+	
 	// open binary file in write mode
 	string filePath = "bestiary/" + newMonster.species + ".bin";
-	ofstream fout(filePath.c_str(), ios::out | ios::binary);
+	ofstream fout(filePath, ios::out | ios::binary);
 	// verify file
 	if (fout.fail()) {
 		cerr << "Error" << endl;
@@ -204,12 +201,16 @@ bool addMonster(int ID) {
 	filePath = "bestiary/Monsters.txt";
 	fstream file;
 	file.open(filePath, ios_base::app);
+
 	// verify file
 	if (file.fail()) {
 		cerr << "Error" << endl;
 		return false;
 	}
-	file << newMonster.species << endl;
+	// put in to file
+	string total = newMonster.species + " " + std::to_string(ID);
+	file << total << endl;
+
 	// save and close
 	file.flush();
 	file.close();
@@ -239,21 +240,34 @@ bool removeMonster(int ID) {
 	int i = 0;
 	while (std::getline(file, monsterSpecies)) {
 		monsterSpeciesArray[i] = monsterSpecies;
+		/*for (int i = 0; i < monsterSpecies.length(); i++) {
+			if (monsterSpecies[i] == ' ') {
+				monsterSpecies = monsterSpecies.substr(0, i - 1);
+			}
+		}*/
 		i++;
 	}
 	// close
 	file.close();
+
 	// open each Monster file and examine ID
 	ifstream fin;
 	string filePath;
 	Monster currentMonster;
 	currentMonster.idNumber = 0;
 	for(int j = 0; j < i; j++) {
-		filePath = "bestiary/" + monsterSpeciesArray[j] + ".bin";
+		// get species name - ID number
+		monsterSpecies = monsterSpeciesArray[j];
+		for (int k = 0; k < monsterSpecies.length(); k++) {
+			if (monsterSpecies[k] == ' ') {
+				monsterSpecies = monsterSpecies.substr(0, k);
+			}
+		}
+		filePath = "bestiary/" + monsterSpecies + ".bin";
 		// open file
 		fin.open(filePath, ios::in | ios::binary);
 		// verify file
-		if (file.fail()) {
+		if (fin.fail()) {
 			cerr << "Error" << endl;
 			return false;
 		}
@@ -261,11 +275,12 @@ bool removeMonster(int ID) {
 		fin.read((char*)&currentMonster, sizeof(Monster));
 		// check ID
 		if (currentMonster.idNumber == ID) {
+			currentMonster.species = monsterSpecies;
 			// break out of loop
 			break;
 		}
 		// else continue
-		file.close();
+		fin.close();
 	}
 	// if Monster wasn't found
 	if (currentMonster.idNumber == 0) {
@@ -275,11 +290,14 @@ bool removeMonster(int ID) {
 	string fileToDelete = "bestiary/" + currentMonster.species + ".bin";
 	std::remove(fileToDelete.c_str());
 	// verify file was deleted
+
 	// DO I NEED THIS
+
 	// delete Monster from array
 	for (int j = 0; j < i; j++) {
 		// if match
-		if (monsterSpeciesArray[j] == currentMonster.species) {
+		// if it begins with the species
+		if (monsterSpeciesArray[j].rfind(currentMonster.species) == 0) {
 			// remove
 			monsterSpeciesArray[j] = "0";
 			break;
@@ -297,7 +315,7 @@ bool removeMonster(int ID) {
 	for (int j = 0; j < i; j++) {
 		// if valid Monster name
 		if (monsterSpecies != "0") {
-			file << monsterSpeciesArray << endl;
+			file << monsterSpeciesArray[j] << endl;
 		}
 	}
 	// save and close
@@ -308,10 +326,165 @@ bool removeMonster(int ID) {
 
 // This function displays a Monster by ID
 void viewMonster(int ID) {
+	// open main file
+	// pass all monster species into array
+	cout << "Viewing Monster with ID " << ID << ":" << endl;
+	string monsterSpeciesArray[15];
+	string monsterSpecies;
+	fstream file;
+	// open text file
+	file.open("bestiary/Monsters.txt", ios_base::in);
+	// verify file
+	if (file.fail()) {
+		cout << "Error" << endl;
+		return;
+	}
+	// iterate through files
+	int i = 0;
+	while (std::getline(file, monsterSpecies)) {
+		monsterSpeciesArray[i] = monsterSpecies;
+		/*for (int i = 0; i < monsterSpecies.length(); i++) {
+		if (monsterSpecies[i] == ' ') {
+		monsterSpecies = monsterSpecies.substr(0, i - 1);
+		}
+		}*/
+		i++;
+	}
+	// close
+	file.close();
 
+	// search through all monsters
+	// if ids match printMonster()
+	// open each Monster file and examine ID
+	ifstream fin;
+	string filePath;
+	Monster currentMonster;
+	currentMonster.idNumber = 0;
+	for (int j = 0; j < i; j++) {
+		// get species name - ID number
+		monsterSpecies = monsterSpeciesArray[j];
+		for (int k = 0; k < monsterSpecies.length(); k++) {
+			if (monsterSpecies[k] == ' ') {
+				monsterSpecies = monsterSpecies.substr(0, k);
+			}
+		}
+		filePath = "bestiary/" + monsterSpecies + ".bin";
+		// open file
+		fin.open(filePath, ios::in | ios::binary);
+		// verify file
+		if (fin.fail()) {
+			cerr << "Error" << endl;
+			return;
+		}
+		// read Monster data
+		fin.read((char*)&currentMonster, sizeof(Monster));
+		// check ID
+		if (currentMonster.idNumber == ID) {
+			// break out of loop
+			break;
+		}
+		// else continue
+		fin.close();
+
+		// print monster
+		printMonster(currentMonster);
+	}
 }
 
 // This function displays all Monsters in the bestiary directory
 void browseMonsters() {
+	string line;
+	string monsterSpecies;
+	string monsterID;
+	fstream file;
 
+	// open file
+	file.open("bestiary/Monsters.txt", ios_base::out);
+	// verify file
+	if (file.fail()) {
+		cerr << "Error" << endl;
+		return;
+	}
+
+	// iterate through
+	while (std::getline(file, line)) {
+		for (int i = 0; i < line.length(); i++) {
+			if (line[i] == ' ') {
+				monsterSpecies = line.substr(0, i);
+				monsterID = line.substr(i);
+				break;
+			}
+		}
+		cout << monsterID << endl;
+		cout << monsterSpecies << endl;
+		cout << endl;
+	}
+
+	// close file
+	file.flush();
+	file.close();
+}
+
+// This function returns the number of Monsters in the bestiary
+int monsterCount() {
+	fstream file;
+	int monsterCount = 0;
+	string data;
+	// open text file
+	file.open("bestiary/Monsters.txt", ios_base::in);
+	// verify file
+	if (file.fail()) {
+		cout << "Error" << endl;
+		return false;
+	}
+	// iterate through files
+	int i = 0;
+	while (std::getline(file, data)) {
+		monsterCount++;
+	}
+	// close
+	file.close();
+	return monsterCount;
+}
+
+// This function returns the highest ID number of 
+// the Monsters in the bestiary
+int highestIDNumber() {
+
+	string highestIDString = "";
+	int highestID = 0;
+	fstream file;
+	string line;
+
+	// create directory
+	CreateDirectory("bestiary", NULL);
+
+	// create file
+	file.open("bestiary/Monsters.txt", ios_base::app);
+	file.flush();
+	file.close();
+
+	// open file
+	file.open("bestiary/Monsters.txt", ios_base::in);
+
+	// verify file
+	if (file.fail()) {
+		cerr << "Error" << endl;
+		return -1;
+	}
+
+	// iterate through file
+	while (std::getline(file, line)) {
+		// iterate through string
+		for (int i = 0; i < line.length(); i++) {
+			// when it hits a space
+			if (line[i] == ' ') {
+				// get everything after
+				highestIDString = line.substr(i + 1);
+				if(stoi(highestIDString) > highestID)
+				highestID = stoi(highestIDString);
+			}
+		}
+	}
+	return highestID;
 }
