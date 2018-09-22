@@ -19,6 +19,10 @@ using std::ios_base;
 // ADD VALIDATION: !> 15 MONSTERS
 // BUT ID > 15 IS OK
 
+// only removeMonster() doesn't work
+
+// something to do with species vs name and I don't know anymore
+
 // This function displays a welcome message and maintains 
 // the game loop
 void monsterQuest() {
@@ -168,7 +172,7 @@ bool addMonster(int ID) {
 		cout << "How old is " << newMonsterName << "?" << endl;
 		cout << "Age: ";
 		cin >> newMonsterAge;
-		while (cin.fail() | newMonsterAge < 0) {
+		while (cin.fail() || newMonsterAge < 0) {
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			cout << "Please enter a valid age." << endl;
@@ -178,9 +182,13 @@ bool addMonster(int ID) {
 		}
 
 		// put it all into a monster
-		for (int i = 0; i < 50; i++) {
-			newMonster.species[i] = newMonsterSpecies[i];
+		for (int i = 0; i < newMonsterSpecies.length(); i++) {
+			newMonster.species[i] = newMonsterSpecies[i];			
+		}
+		for (int i = 0; i < newMonsterName.length(); i++) {
 			newMonster.name[i] = newMonsterName[i];
+		}
+		for (int i = 0; i < newMonsterFavoriteFood.length(); i++) {
 			newMonster.favoriteFood[i] = newMonsterFavoriteFood[i];
 		}
 		/*newMonster.species = newMonsterSpecies;
@@ -199,12 +207,10 @@ bool addMonster(int ID) {
 	// add Monster to file	
 	// get filePath
 	string speciesName;
-	for (int i = 0; i < 50; i++) {
-		speciesName[i] = newMonster.species[i];
-	}
+	speciesName = newMonster.species;
 	// open binary file in write mode
 	string filePath = "bestiary/" + speciesName + ".bin";
-	ofstream fout(filePath, ios::out | ios::binary);
+	ofstream fout(filePath, ios::app | ios::binary);
 
 	// verify file
 	if (fout.fail()) {
@@ -309,9 +315,11 @@ bool removeMonster(int ID) {
 
 		// check ID
 		if (currentMonster.idNumber == ID) {
-			for (int i = 0; i < 50; i++) {
+			// get species name
+			/*for (int i = 0; i < monsterSpecies.length(); i++) {
 				currentMonster.species[i] = monsterSpecies[i];
-			}			
+			}*/		
+			 monsterSpecies = currentMonster.species;
 			// break out of loop
 			break;
 		}
@@ -325,16 +333,20 @@ bool removeMonster(int ID) {
 	}
 
 	// get string value
-	string speciesName;
-	for (int i = 0; i < 50; i++) {
-		speciesName[i] = currentMonster.species[i];
+	string speciesName = "";
+	int j = 0;
+	while (currentMonster.species[j] != '\0') {
+		speciesName += currentMonster.species[j];
+		j++;
 	}
+
 	// delete Monster file
 	string fileToDelete = "bestiary/" + speciesName + ".bin";
 	std::remove(fileToDelete.c_str());
 
 	// verify file was deleted
 	fin.open(fileToDelete, ios::out);
+
 	// should fail
 	if (!fin.fail()) {
 		cerr << "Error" << endl;
@@ -344,7 +356,11 @@ bool removeMonster(int ID) {
 	// delete Monster from array
 	for (int j = 0; j < i; j++) {
 		// if it begins with the species (if match)
-		if (monsterSpeciesArray[j].rfind(currentMonster.species) == 0) {
+		if (monsterSpeciesArray[j].rfind(speciesName) == 0) {
+		// ??????????????????????????????????????????????
+		// if(speciesName.compare(0, speciesName.length(), monsterSpeciesArray[j]) == 0){
+		// if(monsterSpeciesArray[j].starts_with(speciesName)){
+		// if(monsterSpeciesArray[j] == speciesName){
 			// remove
 			monsterSpeciesArray[j] = "0";
 			break;
@@ -458,7 +474,7 @@ void browseMonsters() {
 	fstream file;
 
 	// open file
-	file.open("bestiary/Monsters.txt", ios_base::out);
+	file.open("bestiary/Monsters.txt", ios_base::in);
 	// verify file
 	if (file.fail()) {
 		cerr << "Error" << endl;
@@ -470,7 +486,7 @@ void browseMonsters() {
 		for (int i = 0; i < line.length(); i++) {
 			if (line[i] == ' ') {
 				monsterSpecies = line.substr(0, i);
-				monsterID = line.substr(i);
+				monsterID = line.substr(i+1);
 				break;
 			}
 		}
@@ -480,7 +496,6 @@ void browseMonsters() {
 	}
 
 	// close file
-	file.flush();
 	file.close();
 }
 
