@@ -29,6 +29,11 @@ void monsterQuest() {
 	int choice = -1;
 	// welcome
 	cout << "\nWelcome to Monster Quest!" << endl;
+	cout << "This program manages a monster bestiary. \nYou can choose" <<
+		" to add, remove, or view monsters by their ID number. \nYou" <<
+		" can also choose to browse all the monsters in the bestiary." <<
+		" \nNew monsters are given the next highest ID number so that no\n" <<
+		"ID numbers are used twice." << endl;
 	// choose what they want to do
 	choice = chooseAction();
 	// Monster ID
@@ -129,6 +134,7 @@ int chooseAction() {
 		cout << "Your choice: ";
 		cin >> choice;
 	}
+	cout << endl;
 	return choice;
 }
 
@@ -163,6 +169,11 @@ bool addMonster(int ID) {
 		cout << "What species is your Monster?" << endl;
 		cout << "Species: ";
 		getline(cin, newMonsterSpecies);
+		if (inBestiary(newMonsterSpecies)) {
+			cout << "Sorry, there is already a " <<
+				newMonsterSpecies << " in the bestiary." << endl;
+			return false;
+		}
 		cout << "What is the Monster's name?" << endl;
 		cout << "Name: ";
 		getline(cin, newMonsterName);
@@ -172,6 +183,8 @@ bool addMonster(int ID) {
 		cout << "How old is " << newMonsterName << "?" << endl;
 		cout << "Age: ";
 		cin >> newMonsterAge;
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		while (cin.fail() || newMonsterAge < 0) {
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -198,7 +211,7 @@ bool addMonster(int ID) {
 		newMonster.idNumber = ID;
 
 		// check
-		cout << "Is this correct:" << endl;
+		cout << "\nIs this correct:" << endl;
 		printMonster(newMonster);
 		cout << "'y' for yes: ";
 		cin >> check;
@@ -258,7 +271,7 @@ bool removeMonster(int ID) {
 	// delete from array
 	// reprint txt file
 
-	cout << "Removing Monster with ID " << ID << ":" << endl;
+	cout << "\nRemoving Monster with ID " << ID << ":" << endl;
 	string monsterSpeciesArray[15];
 	// int arrLen = 0;
 	string monsterSpecies;
@@ -406,7 +419,7 @@ bool removeMonster(int ID) {
 void viewMonster(int ID) {
 	// open main file
 	// pass all monster species into array
-	cout << "Viewing Monster with ID " << ID << ":" << endl;
+	cout << "\nViewing Monster with ID " << ID << ":" << endl;
 	string monsterSpeciesArray[15];
 	string monsterSpecies;
 	fstream file;
@@ -436,6 +449,7 @@ void viewMonster(int ID) {
 	string filePath;
 	Monster currentMonster;
 	currentMonster.idNumber = 0;
+	bool hasBeenShown = false;
 
 	// iterate through Monster files
 	for (int j = 0; j < i; j++) {
@@ -473,6 +487,10 @@ void viewMonster(int ID) {
 		// else continue
 		fin.close();		
 	}
+
+	// if it makes it to here, it hasn't found the Monster
+	cout << "Sorry, no Monster of ID Number " <<
+		ID << " is in this bestiary." << endl;
 }
 
 // This function displays all Monsters in the bestiary directory
@@ -490,6 +508,7 @@ void browseMonsters() {
 		return;
 	}
 
+	cout << "Browsing all Monsters: " << endl;
 	// iterate through
 	while (std::getline(file, line)) {
 		for (int i = 0; i < line.length(); i++) {
@@ -499,9 +518,13 @@ void browseMonsters() {
 				break;
 			}
 		}
-		cout << monsterID << endl;
-		cout << monsterSpecies << endl;
+		cout << "ID: " << monsterID << endl;
+		cout << "Species: " << monsterSpecies << endl;
 		cout << endl;
+	}
+
+	if (highestIDNumber() == 0) {
+		cout << "No Monsters in bestiary :(" << endl;
 	}
 
 	// close file
@@ -570,4 +593,40 @@ int highestIDNumber() {
 		}
 	}
 	return highestID;
+}
+
+// This function returns whether the monster species is 
+// already in the bestiary
+bool inBestiary(string monsterSpecies) {
+	// iterate through Monsters.txt
+	fstream file;
+	string line;
+	// open file
+	file.open("bestiary/Monsters.txt", ios_base::in);
+
+	// verify file
+	if (file.fail()) {
+		cerr << "Error" << endl;
+		return false;
+	}
+
+	cout << endl;
+	// iterate through
+	while (std::getline(file, line)) {
+		for (int i = 0; i < line.length(); i++) {
+			// take off ID
+			if (line[i] == ' ') {
+				line = line.substr(0, i);
+			}
+			// compare
+			if (monsterSpecies.compare(line) == 0) {
+				return true;
+			}
+		}
+	}
+
+	// close file
+	file.close();
+
+	return false;
 }

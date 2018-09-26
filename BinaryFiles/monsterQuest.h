@@ -27,3 +27,5 @@ void browseMonsters();
 int monsterCount();
 
 int highestIDNumber();
+
+bool inBestiary(string monsterSpecies);
