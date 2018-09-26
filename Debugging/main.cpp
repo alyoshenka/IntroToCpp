@@ -4,6 +4,8 @@
 #include <time.h>
 #include <string>
 
+#include "MarineVsZergs.cpp"
+
 
 int program1() {
 	/*std::cout << "Provide two numbers and you will be given the sum." << std::endl;
@@ -173,6 +175,7 @@ int main() {
 	// program2();
 	// program3();
 	// program4();
+	marineVsZergs();
 
 	system("pause");
 	return 0;
