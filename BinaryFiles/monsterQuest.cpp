@@ -260,6 +260,7 @@ bool removeMonster(int ID) {
 
 	cout << "Removing Monster with ID " << ID << ":" << endl;
 	string monsterSpeciesArray[15];
+	// int arrLen = 0;
 	string monsterSpecies;
 	fstream file;
 
@@ -290,15 +291,21 @@ bool removeMonster(int ID) {
 	currentMonster.idNumber = 0;
 
 	// for every entry in Monsters.txt/ monsterSpeciesArray[]
-	for(int j = 0; j < i; j++) {
+	for (int j = 0; j < i; j++) {
 		// get species name - ID number
 		monsterSpecies = monsterSpeciesArray[j];
-		for (int k = 0; k < monsterSpecies.length(); k++) {
+		for (int k = 0; k < monsterSpecies.size(); k++) {
 			// take ID number off
 			if (monsterSpecies[k] == ' ') {
 				monsterSpecies = monsterSpecies.substr(0, k);
 			}
 		}
+		// if blank
+		if (monsterSpecies.compare("0") == 0) {
+			// next iteration
+			continue;
+		}
+
 		filePath = "bestiary/" + monsterSpecies + ".bin";
 
 		// open Monster file
@@ -317,9 +324,9 @@ bool removeMonster(int ID) {
 		if (currentMonster.idNumber == ID) {
 			// get species name
 			/*for (int i = 0; i < monsterSpecies.length(); i++) {
-				currentMonster.species[i] = monsterSpecies[i];
-			}*/		
-			 monsterSpecies = currentMonster.species;
+			currentMonster.species[i] = monsterSpecies[i];
+			}*/
+			monsterSpecies = currentMonster.species;
 			// break out of loop
 			break;
 		}
@@ -340,12 +347,13 @@ bool removeMonster(int ID) {
 		j++;
 	}
 
+
 	// delete Monster file
 	string fileToDelete = "bestiary/" + speciesName + ".bin";
 	std::remove(fileToDelete.c_str());
 
 	// verify file was deleted
-	fin.open(fileToDelete, ios::out);
+	fin.open(filePath, ios::out);
 
 	// should fail
 	if (!fin.fail()) {
@@ -357,10 +365,10 @@ bool removeMonster(int ID) {
 	for (int j = 0; j < i; j++) {
 		// if it begins with the species (if match)
 		if (monsterSpeciesArray[j].rfind(speciesName) == 0) {
-		// ??????????????????????????????????????????????
-		// if(speciesName.compare(0, speciesName.length(), monsterSpeciesArray[j]) == 0){
-		// if(monsterSpeciesArray[j].starts_with(speciesName)){
-		// if(monsterSpeciesArray[j] == speciesName){
+			// ??????????????????????????????????????????????
+			// if(speciesName.compare(0, speciesName.length(), monsterSpeciesArray[j]) == 0){
+			// if(monsterSpeciesArray[j].starts_with(speciesName)){
+			// if(monsterSpeciesArray[j] == speciesName){
 			// remove
 			monsterSpeciesArray[j] = "0";
 			break;
@@ -380,7 +388,7 @@ bool removeMonster(int ID) {
 	// write contents of array back into file
 	for (int j = 0; j < i; j++) {
 		// if valid Monster name
-		if (monsterSpecies != "0") {
+		if (monsterSpeciesArray[j].compare("0") != 0) {
 			file << monsterSpeciesArray[j] << endl;
 		}
 	}
@@ -391,6 +399,7 @@ bool removeMonster(int ID) {
 
 	// it worked
 	return true;
+
 }
 
 // This function displays a Monster by ID
