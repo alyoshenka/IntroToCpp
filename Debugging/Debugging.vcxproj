@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="helper.h" />
     <ClInclude Include="Marine.h" />
     <ClInclude Include="Zergling.h" />
   </ItemGroup>

@@ -4,7 +4,7 @@
 #include <time.h>
 #include <string>
 
-#include "MarineVsZergs.cpp"
+#include "helper.h"
 
 
 int program1() {
