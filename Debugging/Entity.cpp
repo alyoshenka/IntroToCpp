@@ -1,7 +1,5 @@
 #include "Entity.h"
 
-
-
 Entity::Entity()
 {
 	health = 40;
